@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import models.Patient;
+import models.MedicalRecord;
 
 public class EMRSystem {
 
@@ -20,7 +21,9 @@ public class EMRSystem {
 
         // التأكد إن المريض مش فارغ
         if (patient == null) {
+
             System.out.println("Patient cannot be null.");
+
             return;
         }
 
@@ -71,20 +74,12 @@ public class EMRSystem {
             // مقارنة الـ IDs
             if (patient.getPatientId().equalsIgnoreCase(patientId)) {
 
-                // إرجاع المريض لو تم العثور عليه
                 return patient;
             }
         }
 
-        // إرجاع null لو مش موجود
+        // لو المريض غير موجود
         return null;
-    }
-
-    // إرجاع كل المرضى
-    public List<Patient> getAllPatients() {
-
-        // إرجاع نسخة من الليستة للحماية
-        return new ArrayList<>(patients);
     }
 
     // تعديل بيانات مريض
@@ -98,7 +93,7 @@ public class EMRSystem {
                     .getPatientId()
                     .equalsIgnoreCase(updatedPatient.getPatientId())) {
 
-                // تحديث البيانات
+                // تحديث بيانات المريض
                 patients.set(i, updatedPatient);
 
                 System.out.println("Patient updated successfully.");
@@ -111,5 +106,64 @@ public class EMRSystem {
         System.out.println("Patient not found.");
 
         return false;
+    }
+
+    // إرجاع كل المرضى
+    public List<Patient> getAllPatients() {
+
+        // إرجاع نسخة من الليستة للحماية
+        return new ArrayList<>(patients);
+    }
+
+    // عرض السجل الطبي لمريض
+    public void displayMedicalRecord(String patientId) {
+
+        // البحث عن المريض
+        Patient patient = findPatientById(patientId);
+
+        if (patient != null) {
+
+            MedicalRecord medicalRecord = patient.getMedicalRecord();
+
+            System.out.println(medicalRecord);
+
+        } else {
+
+            System.out.println("Patient not found.");
+        }
+    }
+
+    // تعديل التشخيص
+    public void updateDiagnosis(String patientId, String newDiagnosis) {
+
+        Patient patient = findPatientById(patientId);
+
+        if (patient != null) {
+
+            patient.getMedicalRecord().setDiagnosis(newDiagnosis);
+
+            System.out.println("Diagnosis updated successfully.");
+
+        } else {
+
+            System.out.println("Patient not found.");
+        }
+    }
+
+    // تعديل الحساسية
+    public void updateAllergies(String patientId, String newAllergies) {
+
+        Patient patient = findPatientById(patientId);
+
+        if (patient != null) {
+
+            patient.getMedicalRecord().setAllergies(newAllergies);
+
+            System.out.println("Allergies updated successfully.");
+
+        } else {
+
+            System.out.println("Patient not found.");
+        }
     }
 }

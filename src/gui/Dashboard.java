@@ -1,7 +1,7 @@
-package hospital.gui;
+package gui;
 
-import hospital.model.Appointment;
-import hospital.service.ScheduleService;
+import models.Appointment;
+import services.ScheduleService;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -16,12 +16,11 @@ public class Dashboard extends JPanel {
 
         // شريط الأزرار (التحكم)
         JPanel sidebar = new JPanel(new GridLayout(5, 1, 5, 5));
-        JButton btnPatients = new JButton("إضافة مريض");
-        JButton btnAppointments = new JButton("حجز موعد");
-        JButton btnDoctors = new JButton("الدكاترة");
-        JButton btnReports = new JButton("التقارير");
-        JButton btnRooms = new JButton("الغرف");
-
+        JButton btnPatients = new JButton("Add Patient");
+        JButton btnAppointments = new JButton("Book Appointment");
+        JButton btnDoctors = new JButton("Doctors");
+        JButton btnReports = new JButton("Reports");
+        JButton btnRooms = new JButton("Rooms");
         sidebar.add(btnPatients);
         sidebar.add(btnAppointments);
         sidebar.add(btnDoctors);
@@ -30,7 +29,7 @@ public class Dashboard extends JPanel {
         add(sidebar, BorderLayout.WEST);
 
         // جدول عرض المواعيد المحجوزة الحالية
-        String[] columns = {"المريض", "الدكتور", "التخصص", "التاريخ", "الوقت"};
+        String[] columns = {"Patient", "Doctor", "Specialization", "Date", "Time"};
         tableModel = new DefaultTableModel(columns, 0);
         JTable table = new JTable(tableModel);
         add(new JScrollPane(table), BorderLayout.CENTER);
@@ -42,9 +41,9 @@ public class Dashboard extends JPanel {
             new AppointmentForm(mainFrame, service, this::refreshAppointmentTable).setVisible(true);
         });
 
-        btnDoctors.addActionListener(e -> JOptionPane.showMessageDialog(this, "عدد الدكاترة المتاحين: " + service.getDoctors().size()));
-        btnReports.addActionListener(e -> JOptionPane.showMessageDialog(this, "خاصية التقارير ستتوفر قريباً."));
-        btnRooms.addActionListener(e -> JOptionPane.showMessageDialog(this, "خاصية الغرف ستتوفر قريباً."));
+        btnDoctors.addActionListener(e -> JOptionPane.showMessageDialog(this, "Number of available doctors: " + service.getDoctors().size()));
+        btnReports.addActionListener(e -> JOptionPane.showMessageDialog(this, "Report feature will be available soon."));
+        btnRooms.addActionListener(e -> JOptionPane.showMessageDialog(this, "Room feature will be available soon."));
 
         refreshAppointmentTable();
     }

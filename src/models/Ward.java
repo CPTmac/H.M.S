@@ -36,4 +36,17 @@ public class Ward {
     public ArrayList<Room> getRooms() {
         return rooms;
     }
+
+    public String getWardName() {
+        return wardName;
+    }
+
+    public void setWardName(String wardName) {
+        this.wardName = wardName;
+    }
+
+    public String toString() {
+        return "Ward: " + wardName + ", Rooms: " + rooms.size();
+    }
+
 }

@@ -1,7 +1,7 @@
-package hospital.gui;
+package gui;
 
-import hospital.model.Doctor;
-import hospital.service.ScheduleService;
+import models.Doctor;
+import services.ScheduleService;
 import javax.swing.*;
 import java.awt.*;
 

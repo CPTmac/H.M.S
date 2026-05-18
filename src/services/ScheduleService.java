@@ -1,29 +1,26 @@
 package services;
 
-import models.Appointment;
-import models.Doctor;
 import java.util.ArrayList;
 import java.util.List;
+import models.Appointment;
+import models.Doctor;
+import models.Patient;
 
 public class ScheduleService {
     private List<Doctor> doctors = new ArrayList<>();
     private List<Appointment> appointments = new ArrayList<>();
-
+    private List<Patient> patients = new ArrayList<>();
     public ScheduleService() {
         // بيانات تجريبية لإظهارها في الـ GUI
-        doctors.add(new Doctor("1", "د. أحمد علي", "باطنة"));
-        doctors.add(new Doctor("2", "د. سارة محمود", "أطفال"));
-        doctors.add(new Doctor("3", "د. محمد حسن", "قلب"));
+        
     }
 
     public List<Doctor> getDoctors() { return doctors; }
     public List<Appointment> getAppointments() { return appointments; }
+    public List<Patient> getPatients() {return patients;}
 
     // إضافة موعد جديد مع التحقق من التعارض (Validation & Availability)
-    public boolean bookAppointment(String patient, Doctor doctor, String date, String time) {
-        if (patient == null || patient.isEmpty() || date == null || date.isEmpty() || time == null || time.isEmpty() || doctor == null) {
-            return false; // Validation خطأ في المدخلات
-        }
+    public boolean bookAppointment(String id, Patient patient, Doctor doctor, String date, String time) {
 
         // منع المواعيد المتكررة لنفس الدكتور في نفس الوقت والتاريخ
         for (Appointment app : appointments) {
@@ -35,8 +32,20 @@ public class ScheduleService {
         }
 
         // إنشاء الحجز وإضافته
-        Appointment newAppointment = new Appointment(patient, doctor, date, time);
+        Appointment newAppointment = new Appointment(id, patient, doctor, date, time);
         appointments.add(newAppointment);
         return true;
+    }
+
+    public void setDoctors(List<Doctor> doctors) {
+        this.doctors = doctors;
+    }
+
+    public void setAppointments(List<Appointment> appointments) {
+        this.appointments = appointments;
+    }
+
+    public void setPatients(List<Patient> patients) {
+        this.patients = patients;
     }
 }

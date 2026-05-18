@@ -1,53 +1,115 @@
 package gui;
 
-import models.Doctor;
-import services.ScheduleService;
-import javax.swing.*;
 import java.awt.*;
+import javax.swing.*;
+import models.Doctor;
+import services.AppointmentService;
 
 public class AppointmentForm extends JDialog {
-    public AppointmentForm(JFrame parent, ScheduleService service, Runnable onAppointmentBooked) {
-        super(parent, "حجز موعد جديد", true);
+
+    public AppointmentForm(JFrame parent,
+                           AppointmentService service,
+                           Runnable onAppointmentBooked) {
+
+        super(parent, "Book New Appointment", true);
+
+        // إعداد شكل الفورم
         setLayout(new GridLayout(5, 2, 10, 10));
+
         setSize(400, 250);
+
         setLocationRelativeTo(parent);
 
-        add(new JLabel(" اسم المريض:"));
-        JTextField txtPatient = new JTextField();
-        add(txtPatient);
+        // حقل ID المريض
+        add(new JLabel("Patient ID:"));
 
-        add(new JLabel(" اختر الدكتور:"));
+        JTextField txtPatientId = new JTextField();
+
+        add(txtPatientId);
+
+        // اختيار الدكتور
+        add(new JLabel("Select Doctor:"));
+
         JComboBox<Doctor> comboDoctors = new JComboBox<>();
-        for (Doctor d : service.getDoctors()) {
-            comboDoctors.addItem(d);
+
+        // تحميل الدكاترة في الـ ComboBox
+        for (Doctor doctor : service.getDoctors()) {
+
+            comboDoctors.addItem(doctor);
         }
+
         add(comboDoctors);
 
-        add(new JLabel(" التاريخ (DD/MM/YYYY):"));
+        // إدخال التاريخ
+        add(new JLabel("Date (DD/MM/YYYY):"));
+
         JTextField txtDate = new JTextField("17/05/2026");
+
         add(txtDate);
 
-        add(new JLabel(" الوقت (HH:MM):"));
+        // إدخال الوقت
+        add(new JLabel("Time (HH:MM):"));
+
         JTextField txtTime = new JTextField("10:00");
+
         add(txtTime);
 
-        JButton btnBook = new JButton("تأكيد الحجز");
+        // زر الحجز
+        JButton btnBook = new JButton("Confirm Booking");
+
         add(btnBook);
 
+        // عند الضغط على الزر
         btnBook.addActionListener(e -> {
-            String patient = txtPatient.getText();
-            Doctor doctor = (Doctor) comboDoctors.getSelectedItem();
-            String date = txtDate.getText();
-            String time = txtTime.getText();
 
-            boolean success = service.bookAppointment(patient, doctor, date, time);
+            // أخذ البيانات فقط من المستخدم
+            String appointmentId =
+                    "APP" + (service.getAppointments().size() + 1);
 
+            String patientId =
+                    txtPatientId.getText();
+
+            Doctor doctor =
+                    (Doctor) comboDoctors.getSelectedItem();
+
+            String date =
+                    txtDate.getText();
+
+            String time =
+                    txtTime.getText();
+
+            // إرسال البيانات للـ Service
+            boolean success =
+                    service.bookAppointment(
+                            appointmentId,
+                            patientId,
+                            doctor,
+                            date,
+                            time
+                    );
+
+            // عرض النتيجة فقط
             if (success) {
-                JOptionPane.showMessageDialog(this, "تم الحجز بنجاح!");
-                onAppointmentBooked.run(); // تحديث الجدول في الـ Dashboard
+
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Appointment booked successfully!"
+                );
+
+                // تحديث الجدول
+                onAppointmentBooked.run();
+
+                // غلق الفورم
                 dispose();
+
             } else {
-                JOptionPane.showMessageDialog(this, "فشل الحجز! تأكد من البيانات أو تعارض الموعد.", "خطأ تعارض", JOptionPane.ERROR_MESSAGE);
+
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Failed to book appointment!",
+                        "Booking Error",
+                        JOptionPane.ERROR_MESSAGE
+                );
             }
         });
     }

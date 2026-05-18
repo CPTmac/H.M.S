@@ -18,7 +18,7 @@ public class Patient extends Person {
     public Patient(String id, String name, int age, String address, String patientId, String insuranceInfo, String medicalHistory, MedicalRecord medicalRecord) {
 
         // استدعاء الكونستركتور الخاص بـ Person
-        super(id, name, age, address);
+        super(id, name, age);
 
         this.patientId = patientId;
         this.insuranceInfo = insuranceInfo;
@@ -70,6 +70,6 @@ public class Patient extends Person {
     @Override
     public String toString() {
 
-        return "Patient{" +"id='" + getId() + '\'' +", name='" + getName() + '\'' +", age=" + getAge() +", address='" + getAddress() + '\'' +", patientId='" + patientId + '\'' +", insuranceInfo='" + insuranceInfo + '\'' +", medicalHistory='" + medicalHistory + '\'' +", medicalRecord=" + medicalRecord +'}';
+        return "Patient{" +"id='" + getId() + '\'' +", name='" + getName() + '\'' +", age=" + getAge() +", address='" +  '\'' +", patientId='" + patientId + '\'' +", insuranceInfo='" + insuranceInfo + '\'' +", medicalHistory='" + medicalHistory + '\'' +", medicalRecord=" + medicalRecord +'}';
     }
 }

@@ -6,15 +6,13 @@ public class Person {
     private String id;
     private String name;
     private int age;
-    private String address;
 
     // Constructor
-    public Person(String id, String name, int age, String address) {
+    public Person(String id, String name, int age) {
 
         this.id = id;
         this.name = name;
         this.age = age;
-        this.address = address;
     }
 
     // Getter للـ ID
@@ -47,20 +45,11 @@ public class Person {
         this.age = age;
     }
 
-    // Getter للعنوان
-    public String getAddress() {
-        return address;
-    }
-
-    // Setter للعنوان
-    public void setAddress(String address) {
-        this.address = address;
-    }
 
     // عرض بيانات الشخص
     @Override
     public String toString() {
 
-        return "Person{" +"id='" + id + '\'' +", name='" + name + '\'' +", age=" + age +", address='" + address + '\'' +'}';
+        return "Person{" +"id='" + id + '\'' +", name='" + name + '\'' +", age=" + age +'}';
     }
 }

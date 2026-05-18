@@ -1,63 +1,152 @@
 package gui;
 
-import models.Appointment;
-import services.ScheduleService;
+import java.awt.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.awt.*;
+import models.Appointment;
+import services.AppointmentService;
 
 public class Dashboard extends JPanel {
-    private ScheduleService service;
-    private DefaultTableModel tableModel;
 
-    public Dashboard(JFrame mainFrame, ScheduleService service) {
+    // السيرفس المسؤول عن اللوجيك
+    private final AppointmentService service;
+
+    // موديل الجدول
+    private final DefaultTableModel tableModel;
+
+    public Dashboard(JFrame mainFrame,
+            AppointmentService service) {
+
         this.service = service;
+
+        // تحديد Layout
         setLayout(new BorderLayout(10, 10));
 
-        // شريط الأزرار (التحكم)
-        JPanel sidebar = new JPanel(new GridLayout(5, 1, 5, 5));
-        JButton btnPatients = new JButton("Add Patient");
-        JButton btnAppointments = new JButton("Book Appointment");
-        JButton btnDoctors = new JButton("Doctors");
-        JButton btnReports = new JButton("Reports");
-        JButton btnRooms = new JButton("Rooms");
+        /*
+         * =========================
+         * Sidebar Buttons
+         * =========================
+         */
+        JPanel sidebar
+                = new JPanel(new GridLayout(5, 1, 5, 5));
+
+        JButton btnPatients
+                = new JButton("Add Patient");
+
+        JButton btnAppointments
+                = new JButton("Book Appointment");
+
+        JButton btnDoctors
+                = new JButton("Doctors");
+
+        JButton btnReports
+                = new JButton("Reports");
+
+        JButton btnRooms
+                = new JButton("Rooms");
+
         sidebar.add(btnPatients);
         sidebar.add(btnAppointments);
         sidebar.add(btnDoctors);
         sidebar.add(btnReports);
         sidebar.add(btnRooms);
+
         add(sidebar, BorderLayout.WEST);
 
-        // جدول عرض المواعيد المحجوزة الحالية
-        String[] columns = {"Patient", "Doctor", "Specialization", "Date", "Time"};
-        tableModel = new DefaultTableModel(columns, 0);
-        JTable table = new JTable(tableModel);
-        add(new JScrollPane(table), BorderLayout.CENTER);
+        /*
+         * =========================
+         * Appointments Table
+         * =========================
+         */
+        String[] columns = {
+            "Patient",
+            "Doctor",
+            "Specialization",
+            "Date",
+            "Time"
+        };
 
-        // ربط أزرار الـ GUI بالـ Forms والـ Services
-        btnPatients.addActionListener(e -> new PatientForm(mainFrame).setVisible(true));
-        
+        tableModel
+                = new DefaultTableModel(columns, 0);
+
+        JTable table
+                = new JTable(tableModel);
+
+        add(new JScrollPane(table),
+                BorderLayout.CENTER);
+
+        /*
+         * =========================
+         * Button Actions
+         * =========================
+         */
+        // فتح فورم المرضى
+        btnPatients.addActionListener(e -> {
+
+            new PatientForm(mainFrame, service)
+                    .setVisible(true);
+        });
+        // فتح فورم الحجز
         btnAppointments.addActionListener(e -> {
-            new AppointmentForm(mainFrame, service, this::refreshAppointmentTable).setVisible(true);
+
+            new AppointmentForm(
+                    mainFrame,
+                    service,
+                    this::refreshAppointmentTable
+            ).setVisible(true);
         });
 
-        btnDoctors.addActionListener(e -> JOptionPane.showMessageDialog(this, "Number of available doctors: " + service.getDoctors().size()));
-        btnReports.addActionListener(e -> JOptionPane.showMessageDialog(this, "Report feature will be available soon."));
-        btnRooms.addActionListener(e -> JOptionPane.showMessageDialog(this, "Room feature will be available soon."));
+        // عرض عدد الدكاترة فقط
+        btnDoctors.addActionListener(e -> {
 
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Available Doctors: "
+                    + service.getDoctors().size()
+            );
+        });
+
+        // Placeholder للتقارير
+        btnReports.addActionListener(e -> {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Reports module coming soon."
+            );
+        });
+
+        // Placeholder للغرف
+        btnRooms.addActionListener(e -> {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Rooms module coming soon."
+            );
+        });
+
+        // تحميل البيانات في الجدول
         refreshAppointmentTable();
     }
 
-    // تحديث الجدول عند إضافة حجز جديد
-    public void refreshAppointmentTable() {
-        tableModel.setRowCount(0); // مسح الجدول الحالي
-        for (Appointment app : service.getAppointments()) {
+    /*
+     * تحديث جدول المواعيد
+     */
+    private void refreshAppointmentTable() {
+
+        // مسح البيانات القديمة
+        tableModel.setRowCount(0);
+
+        // تحميل المواعيد من السيرفس
+        for (Appointment appointment
+                : service.getAppointments()) {
+
             tableModel.addRow(new Object[]{
-                app.getPatientName(),
-                app.getDoctor().getName(),
-                app.getDoctor().getSpecialization(),
-                app.getDate(),
-                app.getTime()
+                appointment.getPatient().getName(),
+                appointment.getDoctor().getName(),
+                appointment.getDoctor()
+                .getSpecialization(),
+                appointment.getDate(),
+                appointment.getTime()
             });
         }
     }

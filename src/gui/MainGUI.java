@@ -1,29 +1,59 @@
 package gui;
 
-import services.ScheduleService;
 import javax.swing.*;
+import services.AppointmentService;
 
 public class MainGUI extends JFrame {
-    private ScheduleService service;
+
+    // السيرفس المسؤول عن اللوجيك
+    private final AppointmentService service;
 
     public MainGUI() {
-        setTitle("hospital management system");
+
+        /*
+         * =========================
+         * Window Settings
+         * =========================
+         */
+
+        setTitle("Hospital Management System");
+
         setSize(800, 500);
+
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
         setLocationRelativeTo(null);
 
-        // إنشاء الـ Service الذي يدير الـ Logic
-        service = new ScheduleService();
+        /*
+         * =========================
+         * Initialize Services
+         * =========================
+         */
 
-        // تحميل الـ Dashboard داخل الشاشة الرئيسية
-        Dashboard dashboard = new Dashboard(this, service);
+        service = new AppointmentService();
+
+        /*
+         * =========================
+         * Load Dashboard
+         * =========================
+         */
+
+        Dashboard dashboard =
+                new Dashboard(this, service);
+
         add(dashboard);
     }
 
     public static void main(String[] args) {
-        // تشغيل واجهة الـ GUI في الـ Thread المخصص لها بـ Java
+
+        /*
+         * تشغيل الـ GUI داخل الـ Event Dispatch Thread
+         */
+
         SwingUtilities.invokeLater(() -> {
-            new MainGUI().setVisible(true);
+
+            new MainGUI()
+                    .setVisible(true);
         });
     }
 }

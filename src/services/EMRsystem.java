@@ -166,4 +166,12 @@ public class EMRSystem {
             System.out.println("Patient not found.");
         }
     }
+
+    public ArrayList<Patient> getPatients() {
+        return patients;
+    }
+
+    public void setPatients(ArrayList<Patient> patients) {
+        this.patients = patients;
+    }
 }

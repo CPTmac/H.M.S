@@ -1,4 +1,4 @@
-package hospital.model;
+package models;
 
 public class Doctor {
     private String id;

@@ -1,7 +1,7 @@
-package hospital.service;
+package services;
 
-import hospital.model.Appointment;
-import hospital.model.Doctor;
+import models.Appointment;
+import models.Doctor;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,15 +1,13 @@
 package services;
 
 import exceptions.LabProblemException;
-
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 import models.LabResult;
 import models.LaboratoryCatalog;
 import models.LaboratoryTest;
 import models.LaboratoryTestStatus;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 public class LaboratoryService {
 
@@ -59,6 +57,29 @@ public class LaboratoryService {
 
         // save
         tests.add(test);
+
+                // If a catalog entry matches the requested test, normalize the stored test name
+                try {
+                        int idx;
+                        if (testName.matches("\\d+")) {
+                                idx = Integer.parseInt(testName) - 1;
+                        } else {
+                                idx = LaboratoryCatalog.resolveIndexByKeyword(testName);
+                        }
+
+                        String disp = LaboratoryCatalog.getDisplayNameByIndex(idx);
+                        String abbr = LaboratoryCatalog.getAbbreviationByIndex(idx);
+                        test.setTestName(abbr + " - " + disp);
+                } catch (Exception ignored) {
+                        // If no catalog match, keep provided testName as-is.
+                }
+
+                // If a billing already exists for the patient, add this test cost to it.
+                try {
+                        services.BillingService.getInstance().addTestCostToPatient(patientId, cost);
+                } catch (Exception ignored) {
+                        // If billing service is not available or update fails, do not block lab creation.
+                }
 
         return test;
     }

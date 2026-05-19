@@ -2,18 +2,14 @@ package models;
 
 public class Patient extends Person {
 
-    private String address;
     private String insuranceInfo;
     private String medicalHistory;
     private MedicalRecord medicalRecord;
 
     // Constructor نظيف ومباشر
-    public Patient(String id,
-                   String name,
-                   int age,
-                   MedicalRecord medicalRecord) {
+    public Patient(String id, String name, int age, String gender, MedicalRecord medicalRecord) {
 
-        super(id, name, age);
+        super(id, name, age, gender);
 
         this.medicalRecord = medicalRecord;
         this.insuranceInfo = "None";
@@ -21,13 +17,6 @@ public class Patient extends Person {
     }
 
     // Getters / Setters
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
 
     public String getInsuranceInfo() {
         return insuranceInfo;
@@ -59,7 +48,7 @@ public class Patient extends Person {
                 "id='" + getId() + '\'' +
                 ", name='" + getName() + '\'' +
                 ", age=" + getAge() +
-                ", address='" + address + '\'' +
+                ", gender='" + getGender() + '\'' +
                 '}';
     }
 }

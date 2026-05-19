@@ -2,7 +2,7 @@ package reports;
 
 public class FinancialReport extends Report {
 
-    private double money;
+    private final double money;
 
     public FinancialReport(double money) {
         this.money = money;
@@ -10,8 +10,9 @@ public class FinancialReport extends Report {
 
     @Override
     public void generate() {
-
+        // Print the title and the primary financial metric for this report.
         System.out.println("===== FINANCIAL REPORT =====");
-        System.out.println("Total Money: " + money);
+        printLine("Total Money", String.format("$%.2f", money));
+        System.out.println("================================");
     }
 }

@@ -1,10 +1,9 @@
 package gui;
 
+import java.awt.*;
+import javax.swing.*;
 import models.Doctor;
 import services.AppointmentService;
-
-import javax.swing.*;
-import java.awt.*;
 
 public class DoctorForm extends JDialog {
 
@@ -27,7 +26,7 @@ public class DoctorForm extends JDialog {
 
         setLayout(
                 new GridLayout(
-                        5,
+                        0,
                         2,
                         10,
                         10
@@ -59,6 +58,12 @@ public class DoctorForm extends JDialog {
                 new JTextField();
 
         add(txtName);
+
+        add(new JLabel("Select Gender:"));
+        JComboBox<String> comboGenders = new JComboBox<>();
+        comboGenders.addItem("Male");
+        comboGenders.addItem("Female");
+        add(comboGenders);
 
         /*
          * =========================
@@ -108,42 +113,31 @@ public class DoctorForm extends JDialog {
             try {
 
                 // قراءة البيانات
-                String id =
-                        txtId.getText();
+                String id = txtId.getText();
 
-                String name =
-                        txtName.getText();
+                String name = txtName.getText(); 
+                String gender = (String) comboGenders.getSelectedItem();
 
-                int age =
-                        Integer.parseInt(
-                                txtAge.getText()
-                        );
+                int age = Integer.parseInt( txtAge.getText() );
 
-                String specialization =
-                        txtSpecialization.getText();
+                String specialization = txtSpecialization.getText();
 
                 // validation
-                if (id.isEmpty()
-                        || name.isEmpty()
-                        || specialization.isEmpty()) {
+                if (id.isEmpty() || name.isEmpty() || specialization.isEmpty()) {
 
-                    JOptionPane.showMessageDialog(
-                            this,
-                            "Please fill all fields."
+                    JOptionPane.showMessageDialog(     this,     "Please fill all fields."
                     );
 
                     return;
                 }
 
                 // إنشاء الدكتور
-                Doctor doctor = new Doctor(id,name,age,specialization);
+                Doctor doctor = new Doctor(id,name,age,gender,specialization);
 
                 // إرسال للـ service
                 service.addDoctor(doctor);
 
-                JOptionPane.showMessageDialog(
-                        this,
-                        "Doctor added successfully!"
+                JOptionPane.showMessageDialog( this, "Doctor added successfully!"
                 );
 
                 dispose();
@@ -151,18 +145,13 @@ public class DoctorForm extends JDialog {
 
             catch (NumberFormatException ex) {
 
-                JOptionPane.showMessageDialog(
-                        this,
-                        "Age must be a valid number."
+                JOptionPane.showMessageDialog( this, "Age must be a valid number."
                 );
             }
 
             catch (Exception ex) {
 
-                JOptionPane.showMessageDialog(
-                        this,
-                        "Error: "
-                                + ex.getMessage()
+                JOptionPane.showMessageDialog( this, "Error: "         + ex.getMessage()
                 );
             }
         });

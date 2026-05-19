@@ -1,11 +1,11 @@
 package gui;
 
-import models.Appointment;
-import services.AppointmentService;
-
+import java.awt.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.awt.*;
+import models.Appointment;
+import services.AppointmentService;
+import services.BillingService;
 
 public class Dashboard extends JPanel {
 
@@ -25,7 +25,7 @@ public class Dashboard extends JPanel {
          * =========================
          */
         JPanel sidebar = new JPanel();
-        sidebar.setLayout(new GridLayout(7, 1, 5, 5));
+        sidebar.setLayout(new GridLayout(8, 1, 5, 5));
 
         JButton btnPatients = new JButton("Add Patient");
         JButton btnDoctors = new JButton("Add Doctor");
@@ -34,6 +34,7 @@ public class Dashboard extends JPanel {
         JButton btnReports = new JButton("Reports");
         JButton btnRooms = new JButton("Rooms");
         JButton btnTests = new JButton("Lab Tests");
+        JButton btnMedications = new JButton("Medications");
 
         sidebar.add(btnPatients);
         sidebar.add(btnDoctors);
@@ -42,6 +43,7 @@ public class Dashboard extends JPanel {
         sidebar.add(btnReports);
         sidebar.add(btnRooms);
         sidebar.add(btnTests);
+        sidebar.add(btnMedications);
 
         add(sidebar, BorderLayout.WEST);
 
@@ -52,6 +54,7 @@ public class Dashboard extends JPanel {
          */
         String[] columns = {
 
+                "Patient ID",
                 "Patient",
                 "Doctor",
                 "Specialization",
@@ -100,7 +103,11 @@ public class Dashboard extends JPanel {
         );
 
         btnTests.addActionListener(e ->
-                new LabTestForm(mainFrame).setVisible(true)
+                new LabTestForm(mainFrame, service).setVisible(true)
+        );
+
+        btnMedications.addActionListener(e ->
+                new MedicationForm(mainFrame, service).setVisible(true)
         );
 
         /*
@@ -122,8 +129,14 @@ public class Dashboard extends JPanel {
 
         for (Appointment app : service.getAppointments()) {
 
+            double due = 0.0;
+            if (app.getPatient() != null) {
+                due = BillingService.getInstance().getTotalDueByPatientId(app.getPatient().getId());
+            }
+
             tableModel.addRow(new Object[]{
 
+                    app.getPatient().getId(),
                     app.getPatient().getName(),
                     app.getDoctor().getName(),
                     app.getDoctor().getSpecialization(),
@@ -132,7 +145,7 @@ public class Dashboard extends JPanel {
                     app.getRoom(),
                     app.getLabTests(),
 
-                    app.getTotalDue(),
+                    due,
 
                     app.getDate(),
                     app.getTime()

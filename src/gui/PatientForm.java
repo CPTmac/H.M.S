@@ -2,8 +2,8 @@ package gui;
 
 import java.awt.*;
 import javax.swing.*;
-import models.Patient;
 import models.MedicalRecord;
+import models.Patient;
 import services.AppointmentService;
 
 public class PatientForm extends JDialog {
@@ -14,8 +14,18 @@ public class PatientForm extends JDialog {
         super(parent, "Add New Patient", true);
 
         setLayout(new GridLayout(0, 2, 10, 10));
-        setSize(350, 200);
+        setSize(350, 400);
         setLocationRelativeTo(parent);
+        
+        add(new JLabel("Select Gender:"));
+        JComboBox<String> comboGenders = new JComboBox<>();
+        comboGenders.addItem("Male");
+        comboGenders.addItem("Female");
+        add(comboGenders);
+
+        // =========================
+        // Patient ID   
+        // =========================
 
         add(new JLabel("Patient ID:"));
         JTextField txtId = new JTextField();
@@ -50,12 +60,20 @@ public class PatientForm extends JDialog {
         JTextField txtAllergies = new JTextField();
         add(txtAllergies);
         // =========================
-        // Blood Type   
+        // Blood Type (selector)
         // =========================
 
         add(new JLabel("Blood Type:"));
-        JTextField txtBloodType = new JTextField();
-        add(txtBloodType);
+        JComboBox<String> comboBlood = new JComboBox<>();
+        comboBlood.addItem("A+");
+        comboBlood.addItem("A-");
+        comboBlood.addItem("B+");
+        comboBlood.addItem("B-");
+        comboBlood.addItem("AB+");
+        comboBlood.addItem("AB-");
+        comboBlood.addItem("O+");
+        comboBlood.addItem("O-");
+        add(comboBlood);
 
         // =========================
         // Save
@@ -69,18 +87,13 @@ public class PatientForm extends JDialog {
 
                 String id = txtId.getText();
                 String name = txtName.getText();
+                String gender = (String) comboGenders.getSelectedItem();
                 int age = Integer.parseInt(txtAge.getText());
                 String diagnosis = txtDiagnosis.getText();
                 String allergies = txtAllergies.getText();
-                String bloodType = txtBloodType.getText();
+                String bloodType = (String) comboBlood.getSelectedItem();
 
-
-                Patient patient = new Patient(
-                        id,
-                        name,
-                        age,
-                        new MedicalRecord(null, diagnosis, allergies, bloodType)
-                );
+                Patient patient = new Patient(id,name,age,gender,new MedicalRecord(null, diagnosis, allergies, bloodType));
 
                 service.addPatient(patient);
 

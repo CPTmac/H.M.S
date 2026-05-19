@@ -75,8 +75,7 @@ public class AppointmentService {
                                    String time,
                                    String diagnosis,
                                    String room,
-                                   String labTests,
-                                   double totalDue) {
+                                   String labTests) {
 
         Patient patient = findPatientById(patientId);
 
@@ -90,6 +89,9 @@ public class AppointmentService {
             return false;
         }
 
+        // Appointment booking now records visit details only.
+        // Total billing is calculated separately by the billing service.
+        
         // check conflict
         for (Appointment a : appointments) {
 
@@ -117,13 +119,27 @@ public class AppointmentService {
                 diagnosis,
                 room,
                 labTests,
-                totalDue
+                0.0
         );
 
         appointments.add(appointment);
 
+        // Estimate an initial room cost and register it with billing.
+        double roomCost = estimateRoomCost(room);
+        services.BillingService.getInstance().addOrCreateRoomCost(patient, roomCost);
+
         System.out.println("Appointment booked successfully.");
         return true;
+    }
+
+    // Very simple room cost estimator. Extend as needed.
+    private double estimateRoomCost(String room) {
+        if (room == null) return 0.0;
+        String r = room.toLowerCase();
+        if (r.contains("vip") || r.contains("private")) return 1000.0;
+        if (r.contains("ward") || r.contains("shared")) return 300.0;
+        if (r.trim().isEmpty()) return 0.0;
+        return 100.0; // default room charge
     }
 
     // =========================

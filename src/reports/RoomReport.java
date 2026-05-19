@@ -2,7 +2,7 @@ package reports;
 
 public class RoomReport extends Report {
 
-    private int rooms;
+    private final int rooms;
 
     public RoomReport(int rooms) {
         this.rooms = rooms;
@@ -10,8 +10,10 @@ public class RoomReport extends Report {
 
     @Override
     public void generate() {
-
-        System.out.println("===== ROOM REPORT =====");
-        System.out.println("Available Rooms: " + rooms);
+        // Report header for the room summary.
+        System.out.println("============== Room Report ==============");
+        printLine("Total Rooms Available", rooms);
+        System.out.println("==========================================");
     }
 }
+

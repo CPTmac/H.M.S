@@ -6,13 +6,15 @@ public class Person {
     private String id;
     private String name;
     private int age;
+    private String gender;
 
     // Constructor
-    public Person(String id, String name, int age) {
+    public Person(String id, String name, int age, String gender) {
 
         this.id = id;
         this.name = name;
         this.age = age;
+        this.gender = gender;
     }
 
     // Getters & Setters
@@ -41,9 +43,13 @@ public class Person {
         this.age = age;
     }
 
-   
+    public String getGender() {
+        return gender;
+    }
 
-    
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
 
     @Override
     public String toString() {
@@ -51,6 +57,8 @@ public class Person {
         return "Person{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
-                ", age=" + age + '}';
+                ", age=" + age +
+                ", gender='" + gender + '\'' +
+                '}';
     }
 }

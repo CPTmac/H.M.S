@@ -7,10 +7,20 @@ import models.Patient;
 
 public class BillingService {
 
+    private static BillingService instance;
+
     private final ArrayList<Billing> bills;
 
-    public BillingService() {
+    private BillingService() {
         bills = new ArrayList<>();
+    }
+
+    // Simple singleton accessor so other services can update bills centrally.
+    public static BillingService getInstance() {
+        if (instance == null) {
+            instance = new BillingService();
+        }
+        return instance;
     }
 
     // =========================
@@ -51,6 +61,7 @@ public class BillingService {
             if (p != null && p.getId().equalsIgnoreCase(patientId)) {
 
                 billing.payBill();
+                billing.calculateBill();
 
                 System.out.println("Payment completed.");
                 return true;
@@ -83,6 +94,79 @@ public class BillingService {
     // =========================
     public List<Billing> getAllBills() {
         return new ArrayList<>(bills);
+    }
+
+    public double getTotalDueByPatientId(String patientId) {
+        Billing billing = findBillByPatientId(patientId);
+        return billing == null ? 0.0 : billing.getTotalDue();
+    }
+
+    // Add test cost to an existing bill for a patient. If no bill exists, nothing happens.
+    public boolean addTestCostToPatient(String patientId, double cost) {
+        Billing b = findBillByPatientId(patientId);
+        if (b == null) return false;
+        b.setTestCost(b.getTestCost() + cost);
+        b.markUnpaid();
+        b.calculateBill();
+        System.out.println("Added test cost " + cost + " to patient " + patientId);
+        return true;
+    }
+
+    // Add test cost and create a bill if one does not already exist.
+    public boolean addTestCostToPatient(Patient patient, double cost) {
+        if (patient == null) return false;
+        Billing billing = findBillByPatientId(patient.getId());
+        if (billing == null) {
+            createBill(patient, 0.0, 0.0, cost);
+            return true;
+        }
+        billing.setTestCost(billing.getTestCost() + cost);
+        billing.markUnpaid();
+        billing.calculateBill();
+        System.out.println("Added test cost " + cost + " to patient " + patient.getId());
+        return true;
+    }
+
+    // Add room cost to existing bill or create one when booking.
+    public void addOrCreateRoomCost(Patient patient, double roomCost) {
+        if (patient == null) return;
+        Billing existing = findBillByPatientId(patient.getId());
+        if (existing != null) {
+            existing.setRoomCost(existing.getRoomCost() + roomCost);
+            existing.markUnpaid();
+            existing.calculateBill();
+            System.out.println("Updated room cost for " + patient.getId());
+        } else {
+            createBill(patient, roomCost, 0.0, 0.0);
+        }
+    }
+
+    // Add medicine cost to an existing bill for a patient.
+    public boolean addMedicineCostToPatient(String patientId, double cost) {
+        Billing b = findBillByPatientId(patientId);
+        if (b == null) {
+            return false;
+        }
+        b.setMedicineCost(b.getMedicineCost() + cost);
+        b.markUnpaid();
+        b.calculateBill();
+        System.out.println("Added medicine cost " + cost + " to patient " + patientId);
+        return true;
+    }
+
+    // Add medicine cost and create a bill if one does not already exist.
+    public boolean addMedicineCostToPatient(Patient patient, double cost) {
+        if (patient == null) return false;
+        Billing billing = findBillByPatientId(patient.getId());
+        if (billing == null) {
+            createBill(patient, 0.0, cost, 0.0);
+            return true;
+        }
+        billing.setMedicineCost(billing.getMedicineCost() + cost);
+        billing.markUnpaid();
+        billing.calculateBill();
+        System.out.println("Added medicine cost " + cost + " to patient " + patient.getId());
+        return true;
     }
 
     // =========================

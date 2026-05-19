@@ -13,7 +13,7 @@ public class AppointmentForm extends JDialog {
 
         super(parent, "Book New Appointment", true);
 
-        setLayout(new GridLayout(9, 2, 10, 10));
+        setLayout(new GridLayout(6, 2, 10, 10));
         setSize(450, 400);
         setLocationRelativeTo(parent);
 
@@ -51,32 +51,12 @@ public class AppointmentForm extends JDialog {
         add(txtTime);
 
         // =========================
-        // Diagnosis
-        // =========================
-        add(new JLabel("Diagnosis:"));
-        JTextField txtDiagnosis = new JTextField();
-        add(txtDiagnosis);
-
-        // =========================
         // Room
         // =========================
         add(new JLabel("Room:"));
         JTextField txtRoom = new JTextField();
         add(txtRoom);
 
-        // =========================
-        // Lab Tests
-        // =========================
-        add(new JLabel("Lab Tests:"));
-        JTextField txtLabTests = new JTextField();
-        add(txtLabTests);
-
-        // =========================
-        // Total Due
-        // =========================
-        add(new JLabel("Total Due:"));
-        JTextField txtTotalDue = new JTextField();
-        add(txtTotalDue);
 
         // =========================
         // Button
@@ -96,30 +76,18 @@ public class AppointmentForm extends JDialog {
             String date = txtDate.getText();
             String time = txtTime.getText();
 
-            String diagnosis = txtDiagnosis.getText();
             String room = txtRoom.getText();
-            String labTests = txtLabTests.getText();
 
-            double totalDue;
-
-            try {
-                totalDue = Double.parseDouble(txtTotalDue.getText());
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Invalid total cost!");
-                return;
-            }
-
-            boolean success = service.bookAppointment(
+                boolean success = service.bookAppointment(
                     appointmentId,
                     patientId,
                     doctor,
                     date,
                     time,
-                    diagnosis,
+                    "",
                     room,
-                    labTests,
-                    totalDue
-            );
+                    ""
+                );
 
             if (success) {
 

@@ -1,152 +1,141 @@
 package gui;
 
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import models.Appointment;
 import services.AppointmentService;
 
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+
 public class Dashboard extends JPanel {
 
-    // السيرفس المسؤول عن اللوجيك
     private final AppointmentService service;
-
-    // موديل الجدول
     private final DefaultTableModel tableModel;
 
     public Dashboard(JFrame mainFrame,
-            AppointmentService service) {
+                     AppointmentService service) {
 
         this.service = service;
 
-        // تحديد Layout
         setLayout(new BorderLayout(10, 10));
 
         /*
          * =========================
-         * Sidebar Buttons
+         * Sidebar
          * =========================
          */
-        JPanel sidebar
-                = new JPanel(new GridLayout(5, 1, 5, 5));
+        JPanel sidebar = new JPanel();
+        sidebar.setLayout(new GridLayout(7, 1, 5, 5));
 
-        JButton btnPatients
-                = new JButton("Add Patient");
-
-        JButton btnAppointments
-                = new JButton("Book Appointment");
-
-        JButton btnDoctors
-                = new JButton("Doctors");
-
-        JButton btnReports
-                = new JButton("Reports");
-
-        JButton btnRooms
-                = new JButton("Rooms");
+        JButton btnPatients = new JButton("Add Patient");
+        JButton btnDoctors = new JButton("Add Doctor");
+        JButton btnAppointments = new JButton("Book Appointment");
+        JButton btnBilling = new JButton("Billing");
+        JButton btnReports = new JButton("Reports");
+        JButton btnRooms = new JButton("Rooms");
+        JButton btnTests = new JButton("Lab Tests");
 
         sidebar.add(btnPatients);
-        sidebar.add(btnAppointments);
         sidebar.add(btnDoctors);
+        sidebar.add(btnAppointments);
+        sidebar.add(btnBilling);
         sidebar.add(btnReports);
         sidebar.add(btnRooms);
+        sidebar.add(btnTests);
 
         add(sidebar, BorderLayout.WEST);
 
         /*
          * =========================
-         * Appointments Table
+         * Table
          * =========================
          */
         String[] columns = {
-            "Patient",
-            "Doctor",
-            "Specialization",
-            "Date",
-            "Time"
+
+                "Patient",
+                "Doctor",
+                "Specialization",
+                "Diagnosis",
+                "Room",
+                "Lab Tests",
+                "Total Due",
+                "Date",
+                "Time"
         };
 
-        tableModel
-                = new DefaultTableModel(columns, 0);
+        tableModel = new DefaultTableModel(columns, 0);
 
-        JTable table
-                = new JTable(tableModel);
+        JTable table = new JTable(tableModel);
 
-        add(new JScrollPane(table),
-                BorderLayout.CENTER);
+        add(new JScrollPane(table), BorderLayout.CENTER);
 
         /*
          * =========================
-         * Button Actions
+         * Actions
          * =========================
          */
-        // فتح فورم المرضى
-        btnPatients.addActionListener(e -> {
 
-            new PatientForm(mainFrame, service)
-                    .setVisible(true);
-        });
-        // فتح فورم الحجز
-        btnAppointments.addActionListener(e -> {
+        btnPatients.addActionListener(e ->
+                new PatientForm(mainFrame, service).setVisible(true)
+        );
 
-            new AppointmentForm(
-                    mainFrame,
-                    service,
-                    this::refreshAppointmentTable
-            ).setVisible(true);
-        });
+        btnDoctors.addActionListener(e ->
+                new DoctorForm(mainFrame, service).setVisible(true)
+        );
 
-        // عرض عدد الدكاترة فقط
-        btnDoctors.addActionListener(e -> {
+        btnAppointments.addActionListener(e ->
+                new AppointmentForm(mainFrame, service, this::refreshAppointmentTable).setVisible(true)
+        );
 
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Available Doctors: "
-                    + service.getDoctors().size()
-            );
-        });
+        btnBilling.addActionListener(e ->
+                new BillingForm(mainFrame).setVisible(true)
+        );
 
-        // Placeholder للتقارير
-        btnReports.addActionListener(e -> {
+        btnReports.addActionListener(e ->
+                new ReportForm(mainFrame).setVisible(true)
+        );
 
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Reports module coming soon."
-            );
-        });
+        btnRooms.addActionListener(e ->
+                new RoomForm(mainFrame).setVisible(true)
+        );
 
-        // Placeholder للغرف
-        btnRooms.addActionListener(e -> {
+        btnTests.addActionListener(e ->
+                new LabTestForm(mainFrame).setVisible(true)
+        );
 
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Rooms module coming soon."
-            );
-        });
-
-        // تحميل البيانات في الجدول
+        /*
+         * =========================
+         * Load Data
+         * =========================
+         */
         refreshAppointmentTable();
     }
 
     /*
-     * تحديث جدول المواعيد
+     * =========================
+     * Refresh Table
+     * =========================
      */
     private void refreshAppointmentTable() {
 
-        // مسح البيانات القديمة
         tableModel.setRowCount(0);
 
-        // تحميل المواعيد من السيرفس
-        for (Appointment appointment
-                : service.getAppointments()) {
+        for (Appointment app : service.getAppointments()) {
 
             tableModel.addRow(new Object[]{
-                appointment.getPatient().getName(),
-                appointment.getDoctor().getName(),
-                appointment.getDoctor()
-                .getSpecialization(),
-                appointment.getDate(),
-                appointment.getTime()
+
+                    app.getPatient().getName(),
+                    app.getDoctor().getName(),
+                    app.getDoctor().getSpecialization(),
+
+                    app.getDiagnosis(),
+                    app.getRoom(),
+                    app.getLabTests(),
+
+                    app.getTotalDue(),
+
+                    app.getDate(),
+                    app.getTime()
             });
         }
     }

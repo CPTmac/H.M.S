@@ -1,37 +1,94 @@
 package files;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.util.Scanner;
+import java.io.*;
+import java.util.ArrayList;
 
 public class FileHandler {
 
-    public void writeData(String fileName, String data) {
+    /*
+     * =========================
+     * Write Data To File
+     * =========================
+     */
 
-        try {
-            FileWriter file = new FileWriter(fileName);
-            file.write(data);
-            file.close();
+    public void writeData(
+            String fileName,
+            ArrayList<String> data
+    ) {
 
-        } catch(Exception e) {
-            System.out.println("Error writing file: " + fileName);
+        try (
+
+                BufferedWriter writer =
+                        new BufferedWriter(
+                                new FileWriter(fileName)
+                        )
+
+        ) {
+
+            // كتابة كل سطر
+            for (String line : data) {
+
+                writer.write(line);
+
+                writer.newLine();
+            }
+
+            System.out.println(
+                    "Data saved successfully."
+            );
+
+        }
+
+        catch (IOException e) {
+
+            System.out.println(
+                    "Error writing file: "
+                            + fileName
+            );
         }
     }
 
-    public void readData(String fileName) {
+    /*
+     * =========================
+     * Read Data From File
+     * =========================
+     */
 
-        try {
-            File file = new File(fileName);
-            Scanner input = new Scanner(file);
+    public ArrayList<String> readData(
+            String fileName
+    ) {
 
-            while(input.hasNextLine()) {
-                System.out.println(input.nextLine());
+        ArrayList<String> lines =
+                new ArrayList<>();
+
+        try (
+
+                BufferedReader reader =
+                        new BufferedReader(
+                                new FileReader(fileName)
+                        )
+
+        ) {
+
+            String line;
+
+            // قراءة كل سطر
+            while ((line = reader.readLine())
+                    != null) {
+
+                lines.add(line);
             }
 
-            input.close();
-
-        } catch(Exception e) {
-            System.out.println("Error reading file: " + fileName);
         }
+
+        catch (IOException e) {
+
+            System.out.println(
+                    "Error reading file: "
+                            + fileName
+            );
+        }
+
+        return lines;
     }
 }

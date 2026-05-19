@@ -2,22 +2,22 @@ package models;
 
 public class Appointment {
 
-    // رقم الموعد
     private String appointmentId;
 
-    // بيانات المريض
     private Patient patient;
-
-    // بيانات الدكتور
     private Doctor doctor;
 
-    // تاريخ الموعد
     private String date;
-
-    // وقت الموعد
     private String time;
 
-    // Constructor
+    private String diagnosis;
+    private String room;
+    private String labTests;
+    private double totalDue;
+
+    // =========================
+    // Constructor الأساسي
+    // =========================
     public Appointment(String appointmentId,
                        Patient patient,
                        Doctor doctor,
@@ -29,68 +29,120 @@ public class Appointment {
         this.doctor = doctor;
         this.date = date;
         this.time = time;
+
+        setDefaults();
     }
 
-    // Getter للـ Appointment ID
+    // =========================
+    // Constructor الموسع
+    // =========================
+    public Appointment(String appointmentId,
+                       Patient patient,
+                       Doctor doctor,
+                       String date,
+                       String time,
+                       String diagnosis,
+                       String room,
+                       String labTests,
+                       double totalDue) {
+
+        this.appointmentId = appointmentId;
+        this.patient = patient;
+        this.doctor = doctor;
+        this.date = date;
+        this.time = time;
+
+        this.diagnosis = diagnosis;
+        this.room = room;
+        this.labTests = labTests;
+        this.totalDue = totalDue;
+    }
+
+    // =========================
+    // Default values handler
+    // =========================
+    private void setDefaults() {
+        this.diagnosis = "";
+        this.room = "";
+        this.labTests = "";
+        this.totalDue = 0.0;
+    }
+
+    // =========================
+    // Getters / Setters
+    // =========================
+
     public String getAppointmentId() {
         return appointmentId;
     }
 
-    // Setter للـ Appointment ID
-    public void setAppointmentId(String appointmentId) {
-        this.appointmentId = appointmentId;
-    }
-
-    // Getter للمريض
     public Patient getPatient() {
         return patient;
     }
 
-    // Setter للمريض
-    public void setPatient(Patient patient) {
-        this.patient = patient;
-    }
-
-    // Getter للدكتور
     public Doctor getDoctor() {
         return doctor;
     }
 
-    // Setter للدكتور
-    public void setDoctor(Doctor doctor) {
-        this.doctor = doctor;
-    }
-
-    // Getter للتاريخ
     public String getDate() {
         return date;
     }
 
-    // Setter للتاريخ
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    // Getter للوقت
     public String getTime() {
         return time;
     }
 
-    // Setter للوقت
-    public void setTime(String time) {
-        this.time = time;
+    public String getDiagnosis() {
+        return diagnosis;
     }
 
-    // عرض بيانات الموعد
+    public String getRoom() {
+        return room;
+    }
+
+    public String getLabTests() {
+        return labTests;
+    }
+
+    public double getTotalDue() {
+        return totalDue;
+    }
+
+    public void setDiagnosis(String diagnosis) {
+        this.diagnosis = diagnosis;
+    }
+
+    public void setRoom(String room) {
+        this.room = room;
+    }
+
+    public void setLabTests(String labTests) {
+        this.labTests = labTests;
+    }
+
+    public void setTotalDue(double totalDue) {
+        this.totalDue = totalDue;
+    }
+
+    // =========================
+    // Safe toString (important)
+    // =========================
     @Override
     public String toString() {
 
+        String patientName = (patient != null) ? patient.getName() : "N/A";
+        String doctorName = (doctor != null) ? doctor.getName() : "N/A";
+
         return "Appointment{" +
-                "appointmentId='" + appointmentId + '\'' +
-                ", patient=" + patient.getName() +
-                ", doctor=" + doctor.getName() +
+                "id='" + appointmentId + '\'' +
+                ", patient=" + patientName +
+                ", doctor=" + doctorName +
                 ", date='" + date + '\'' +
                 ", time='" + time + '\'' +
+                ", diagnosis='" + diagnosis + '\'' +
+                ", room='" + room + '\'' +
+                ", labTests='" + labTests + '\'' +
+                ", totalDue=" + totalDue +
                 '}';
     }
 }

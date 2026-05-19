@@ -5,7 +5,7 @@ import services.AppointmentService;
 
 public class MainGUI extends JFrame {
 
-    // السيرفس المسؤول عن اللوجيك
+    // السيرفس المسؤول عن إدارة البرنامج كله
     private final AppointmentService service;
 
     public MainGUI() {
@@ -18,7 +18,7 @@ public class MainGUI extends JFrame {
 
         setTitle("Hospital Management System");
 
-        setSize(800, 500);
+        setSize(1000, 600);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -26,7 +26,7 @@ public class MainGUI extends JFrame {
 
         /*
          * =========================
-         * Initialize Services
+         * Initialize Service
          * =========================
          */
 
@@ -34,26 +34,57 @@ public class MainGUI extends JFrame {
 
         /*
          * =========================
-         * Load Dashboard
+         * Dashboard
          * =========================
          */
 
         Dashboard dashboard =
-                new Dashboard(this, service);
+                new Dashboard(
+                        this,
+                        service
+                );
 
         add(dashboard);
     }
 
+    /*
+     * =========================
+     * Main Method
+     * =========================
+     */
+
     public static void main(String[] args) {
 
         /*
-         * تشغيل الـ GUI داخل الـ Event Dispatch Thread
+         * تشغيل الـ GUI داخل Thread آمن لـ Swing
          */
 
         SwingUtilities.invokeLater(() -> {
 
-            new MainGUI()
-                    .setVisible(true);
+            try {
+
+                /*
+                 * إنشاء وتشغيل البرنامج
+                 */
+
+                MainGUI gui =
+                        new MainGUI();
+
+                gui.setVisible(true);
+
+            }
+
+            catch (Exception e) {
+
+                /*
+                 * طباعة أي مشكلة أثناء التشغيل
+                 */
+
+                System.out.println(
+                        "System Error: "
+                                + e.getMessage()
+                );
+            }
         });
     }
 }

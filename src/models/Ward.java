@@ -2,51 +2,49 @@ package models;
 
 import java.util.ArrayList;
 
-
 public class Ward {
 
+    // اسم العنبر
     private String wardName;
+
+    // ليستة الغرف
     private ArrayList<Room> rooms;
 
-    public Ward(String wardName) {
+    // Constructor
+    public Ward(String wardName,
+                ArrayList<Room> rooms) {
 
         this.wardName = wardName;
-        rooms = new ArrayList<>();
+
+        this.rooms = rooms;
     }
 
-    // Add room
-    public void addRoom(Room room) {
-        rooms.add(room);
-    }
-
-    // Display available rooms
-    public void showAvailableRooms() {
-
-        for (Room room : rooms) {
-
-            if (!room.isOccupied()) {
-
-                System.out.println(
-                        "Room " + room.getRoomNumber()
-                );
-            }
-        }
-    }
-
-    public ArrayList<Room> getRooms() {
-        return rooms;
-    }
-
+    // Getter لاسم العنبر
     public String getWardName() {
         return wardName;
     }
 
+    // Setter لاسم العنبر
     public void setWardName(String wardName) {
         this.wardName = wardName;
     }
 
-    public String toString() {
-        return "Ward: " + wardName + ", Rooms: " + rooms.size();
+    // Getter للغرف
+    public ArrayList<Room> getRooms() {
+        return rooms;
     }
 
+    // Setter للغرف
+    public void setRooms(ArrayList<Room> rooms) {
+        this.rooms = rooms;
+    }
+
+    @Override
+    public String toString() {
+
+        return "Ward{" +
+                "wardName='" + wardName + '\'' +
+                ", rooms=" + rooms.size() +
+                '}';
+    }
 }

@@ -28,10 +28,10 @@ public class EMRSystem {
         }
 
         // التأكد إن الـ ID مش متكرر
-        if (findPatientById(patient.getPatientId()) != null) {
+        if (findPatientById(patient.getId()) != null) {
 
             System.out.println(
-                "Patient with ID " + patient.getPatientId() + " already exists."
+                "Patient with ID " + patient.getId() + " already exists."
             );
 
             return;
@@ -72,7 +72,7 @@ public class EMRSystem {
         for (Patient patient : patients) {
 
             // مقارنة الـ IDs
-            if (patient.getPatientId().equalsIgnoreCase(patientId)) {
+            if (patient.getId().equalsIgnoreCase(patientId)) {
 
                 return patient;
             }
@@ -90,8 +90,8 @@ public class EMRSystem {
 
             // البحث باستخدام الـ ID
             if (patients.get(i)
-                    .getPatientId()
-                    .equalsIgnoreCase(updatedPatient.getPatientId())) {
+                    .getId()
+                    .equalsIgnoreCase(updatedPatient.getId())) {
 
                 // تحديث بيانات المريض
                 patients.set(i, updatedPatient);

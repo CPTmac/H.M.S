@@ -13,93 +13,120 @@ public class AppointmentForm extends JDialog {
 
         super(parent, "Book New Appointment", true);
 
-        // إعداد شكل الفورم
-        setLayout(new GridLayout(5, 2, 10, 10));
-
-        setSize(400, 250);
-
+        setLayout(new GridLayout(9, 2, 10, 10));
+        setSize(450, 400);
         setLocationRelativeTo(parent);
 
-        // حقل ID المريض
+        // =========================
+        // Patient ID
+        // =========================
         add(new JLabel("Patient ID:"));
-
         JTextField txtPatientId = new JTextField();
-
         add(txtPatientId);
 
-        // اختيار الدكتور
+        // =========================
+        // Doctor
+        // =========================
         add(new JLabel("Select Doctor:"));
-
         JComboBox<Doctor> comboDoctors = new JComboBox<>();
 
-        // تحميل الدكاترة في الـ ComboBox
         for (Doctor doctor : service.getDoctors()) {
-
             comboDoctors.addItem(doctor);
         }
 
         add(comboDoctors);
 
-        // إدخال التاريخ
-        add(new JLabel("Date (DD/MM/YYYY):"));
-
-        JTextField txtDate = new JTextField("17/05/2026");
-
+        // =========================
+        // Date
+        // =========================
+        add(new JLabel("Date:"));
+        JTextField txtDate = new JTextField();
         add(txtDate);
 
-        // إدخال الوقت
-        add(new JLabel("Time (HH:MM):"));
-
-        JTextField txtTime = new JTextField("10:00");
-
+        // =========================
+        // Time
+        // =========================
+        add(new JLabel("Time:"));
+        JTextField txtTime = new JTextField();
         add(txtTime);
 
-        // زر الحجز
-        JButton btnBook = new JButton("Confirm Booking");
+        // =========================
+        // Diagnosis
+        // =========================
+        add(new JLabel("Diagnosis:"));
+        JTextField txtDiagnosis = new JTextField();
+        add(txtDiagnosis);
 
+        // =========================
+        // Room
+        // =========================
+        add(new JLabel("Room:"));
+        JTextField txtRoom = new JTextField();
+        add(txtRoom);
+
+        // =========================
+        // Lab Tests
+        // =========================
+        add(new JLabel("Lab Tests:"));
+        JTextField txtLabTests = new JTextField();
+        add(txtLabTests);
+
+        // =========================
+        // Total Due
+        // =========================
+        add(new JLabel("Total Due:"));
+        JTextField txtTotalDue = new JTextField();
+        add(txtTotalDue);
+
+        // =========================
+        // Button
+        // =========================
+        JButton btnBook = new JButton("Confirm Booking");
         add(btnBook);
 
-        // عند الضغط على الزر
         btnBook.addActionListener(e -> {
 
-            // أخذ البيانات فقط من المستخدم
             String appointmentId =
                     "APP" + (service.getAppointments().size() + 1);
 
-            String patientId =
-                    txtPatientId.getText();
+            String patientId = txtPatientId.getText();
 
-            Doctor doctor =
-                    (Doctor) comboDoctors.getSelectedItem();
+            Doctor doctor = (Doctor) comboDoctors.getSelectedItem();
 
-            String date =
-                    txtDate.getText();
+            String date = txtDate.getText();
+            String time = txtTime.getText();
 
-            String time =
-                    txtTime.getText();
+            String diagnosis = txtDiagnosis.getText();
+            String room = txtRoom.getText();
+            String labTests = txtLabTests.getText();
 
-            // إرسال البيانات للـ Service
-            boolean success =
-                    service.bookAppointment(
-                            appointmentId,
-                            patientId,
-                            doctor,
-                            date,
-                            time
-                    );
+            double totalDue;
 
-            // عرض النتيجة فقط
+            try {
+                totalDue = Double.parseDouble(txtTotalDue.getText());
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Invalid total cost!");
+                return;
+            }
+
+            boolean success = service.bookAppointment(
+                    appointmentId,
+                    patientId,
+                    doctor,
+                    date,
+                    time,
+                    diagnosis,
+                    room,
+                    labTests,
+                    totalDue
+            );
+
             if (success) {
 
-                JOptionPane.showMessageDialog(
-                        this,
-                        "Appointment booked successfully!"
-                );
+                JOptionPane.showMessageDialog(this, "Appointment booked successfully!");
 
-                // تحديث الجدول
                 onAppointmentBooked.run();
 
-                // غلق الفورم
                 dispose();
 
             } else {
@@ -107,7 +134,7 @@ public class AppointmentForm extends JDialog {
                 JOptionPane.showMessageDialog(
                         this,
                         "Failed to book appointment!",
-                        "Booking Error",
+                        "Error",
                         JOptionPane.ERROR_MESSAGE
                 );
             }

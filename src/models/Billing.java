@@ -2,6 +2,7 @@ package models;
 
 public class Billing {
 
+    @SuppressWarnings("FieldMayBeFinal")
     private Patient patient;
 
     private double roomCost;
@@ -55,7 +56,12 @@ public class Billing {
         return paid;
     }
 
+    @SuppressWarnings("override")
     public String toString() {
         return "Billing for Patient: " + patient.getName() + "\n" + "Room Cost: " + roomCost + "\n" + "Medicine Cost: " + medicineCost + "\n" + "Test Cost: " + testCost + "\n" + "Total Amount: " + totalAmount + "\n" + "Paid: " + (paid ? "Yes" : "No");
+    }
+
+    public Patient getPatient() {
+        return patient;
     }
 }

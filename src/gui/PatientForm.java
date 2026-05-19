@@ -3,137 +3,93 @@ package gui;
 import java.awt.*;
 import javax.swing.*;
 import models.Patient;
+import models.MedicalRecord;
 import services.AppointmentService;
 
 public class PatientForm extends JDialog {
 
     public PatientForm(JFrame parent,
-                       AppointmentService service) {
+            AppointmentService service) {
 
         super(parent, "Add New Patient", true);
 
-        setLayout(new GridLayout(4, 2, 10, 10));
-
+        setLayout(new GridLayout(0, 2, 10, 10));
         setSize(350, 200);
-
         setLocationRelativeTo(parent);
 
-        /*
-         * =========================
-         * Name Field
-         * =========================
-         */
+        add(new JLabel("Patient ID:"));
+        JTextField txtId = new JTextField();
+        add(txtId);
 
+        // =========================
+        // Name
+        // =========================
         add(new JLabel("Patient Name:"));
-
-        JTextField txtName =
-                new JTextField();
-
+        JTextField txtName = new JTextField();
         add(txtName);
 
-        /*
-         * =========================
-         * Age Field
-         * =========================
-         */
-
+        // =========================
+        // Age
+        // =========================
         add(new JLabel("Age:"));
-
-        JTextField txtAge =
-                new JTextField();
-
+        JTextField txtAge = new JTextField();
         add(txtAge);
+        // =========================
+        // Diagnosis    
+        // =========================
 
-        /*
-         * =========================
-         * Address Field
-         * =========================
-         */
+        add(new JLabel("Diagnosis:"));
+        JTextField txtDiagnosis = new JTextField();
+        add(txtDiagnosis);
 
-        add(new JLabel("Address:"));
+        // =========================
+        // Allergies
+        // =========================
 
-        JTextField txtAddress =
-                new JTextField();
+        add(new JLabel("Allergies:"));
+        JTextField txtAllergies = new JTextField();
+        add(txtAllergies);
+        // =========================
+        // Blood Type   
+        // =========================
 
-        add(txtAddress);
+        add(new JLabel("Blood Type:"));
+        JTextField txtBloodType = new JTextField();
+        add(txtBloodType);
 
-        /*
-         * =========================
-         * Save Button
-         * =========================
-         */
-
-        JButton btnSave =
-                new JButton("Save Patient");
-
+        // =========================
+        // Save
+        // =========================
+        JButton btnSave = new JButton("Save Patient");
         add(btnSave);
-
-        /*
-         * =========================
-         * Button Action
-         * =========================
-         */
 
         btnSave.addActionListener(e -> {
 
             try {
 
-                // أخذ البيانات فقط
-                String name =
-                        txtName.getText();
+                String id = txtId.getText();
+                String name = txtName.getText();
+                int age = Integer.parseInt(txtAge.getText());
+                String diagnosis = txtDiagnosis.getText();
+                String allergies = txtAllergies.getText();
+                String bloodType = txtBloodType.getText();
 
-                int age =
-                        Integer.parseInt(
-                                txtAge.getText()
-                        );
 
-                String address =
-                        txtAddress.getText();
-
-                // Validation بسيط
-                if (name.isEmpty()) {
-
-                    JOptionPane.showMessageDialog(
-                            this,
-                            "Please enter patient name.",
-                            "Error",
-                            JOptionPane.ERROR_MESSAGE
-                    );
-
-                    return;
-                }
-
-                // إنشاء المريض
                 Patient patient = new Patient(
-                        "1",
+                        id,
                         name,
                         age,
-                        address,
-                        "P" + (service.getPatients().size() + 1),
-                        "None",
-                        "None",
-                        null
+                        new MedicalRecord(null, diagnosis, allergies, bloodType)
                 );
 
-                // إرسال للسيرفس
                 service.addPatient(patient);
 
-                // رسالة نجاح
-                JOptionPane.showMessageDialog(
-                        this,
-                        "Patient added successfully!"
-                );
+                JOptionPane.showMessageDialog(this, "Patient added!");
 
                 dispose();
 
             } catch (NumberFormatException ex) {
-
-                JOptionPane.showMessageDialog(
-                        this,
-                        "Age must be a number.",
-                        "Input Error",
-                        JOptionPane.ERROR_MESSAGE
-                );
+                JOptionPane.showMessageDialog(this, "Age must be a number!");
             }
         });
     }

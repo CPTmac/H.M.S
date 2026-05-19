@@ -85,6 +85,8 @@ public class BillingForm extends JDialog {
 
         btnPay.addActionListener(e -> {
             String patientId = txtPatientId.getText().trim();
+            String paymentMethod = comboPayment.getSelectedItem().toString();
+
             if (patientId.isEmpty()) {
                 JOptionPane.showMessageDialog(
                         this,
@@ -95,7 +97,7 @@ public class BillingForm extends JDialog {
                 return;
             }
 
-            boolean paid = BillingService.getInstance().payBill(patientId);
+            boolean paid = BillingService.getInstance().payBill(patientId, paymentMethod);
             if (paid) {
                 JOptionPane.showMessageDialog(
                         this,

@@ -3,16 +3,15 @@ package reports;
 public abstract class Report {
     /**
      * Generate the report output in a consistent format.
-     * Concrete report implementations must provide their own report data.
+     * Concrete report implementations must return the formatted text.
      */
-    public abstract void generate();
+    public abstract String generate();
 
     /**
-     * Print a single report line with an aligned label and value.
-     * This helper keeps the formatting consistent across reports.
+     * Format a single report line with an aligned label and value.
      */
-    protected void printLine(String label, Object value) {
-        System.out.println(String.format("%-23s: %s", label, value));
+    protected String formatLine(String label, Object value) {
+        return String.format("%-23s: %s%n", label, value);
     }
 }
 

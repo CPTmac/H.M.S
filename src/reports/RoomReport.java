@@ -9,11 +9,14 @@ public class RoomReport extends Report {
     }
 
     @Override
-    public void generate() {
-        // Report header for the room summary.
-        System.out.println("============== Room Report ==============");
-        printLine("Total Rooms Available", rooms);
-        System.out.println("==========================================");
+    public String generate() {
+        StringBuilder output = new StringBuilder();
+
+        output.append("============== Room Report ==============\n");
+        output.append(formatLine("Total Rooms Available", rooms));
+        output.append("==========================================\n");
+
+        return output.toString();
     }
 }
 

@@ -1,9 +1,8 @@
 package services;
 
-import reports.Report;
-
 import java.util.ArrayList;
 import java.util.List;
+import reports.Report;
 
 public class ReportService {
 
@@ -59,7 +58,7 @@ public class ReportService {
             return;
         }
 
-        report.generate();
+        System.out.print(report.generate());
     }
 
     /*

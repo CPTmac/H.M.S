@@ -41,6 +41,7 @@ public class BillingService {
         billing.setRoomCost(roomCost);
         billing.setMedicineCost(medicineCost);
         billing.setTestCost(testCost);
+        billing.setPaymentMethod("Unpaid");
 
         billing.calculateBill();
 
@@ -52,7 +53,7 @@ public class BillingService {
     // =========================
     // PAY BILL (FIXED ID SYSTEM)
     // =========================
-    public boolean payBill(String patientId) {
+    public boolean payBill(String patientId, String paymentMethod) {
 
         for (Billing billing : bills) {
 
@@ -60,10 +61,11 @@ public class BillingService {
 
             if (p != null && p.getId().equalsIgnoreCase(patientId)) {
 
+                billing.setPaymentMethod(paymentMethod);
                 billing.payBill();
                 billing.calculateBill();
 
-                System.out.println("Payment completed.");
+                System.out.println("Payment completed with " + paymentMethod + ".");
                 return true;
             }
         }

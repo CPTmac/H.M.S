@@ -11,6 +11,7 @@ public class Billing {
 
     private double totalAmount;
     private double totalDue;
+    private String paymentMethod;
 
     private boolean paid;
 
@@ -20,6 +21,7 @@ public class Billing {
         paid = false;
         totalAmount = 0.0;
         totalDue = 0.0;
+        paymentMethod = "Unpaid";
     }
 
     // calculate bill totals and due balance
@@ -76,6 +78,18 @@ public class Billing {
         return totalDue;
     }
 
+    public String getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(String paymentMethod) {
+        if (paymentMethod == null || paymentMethod.isBlank()) {
+            this.paymentMethod = "Unpaid";
+        } else {
+            this.paymentMethod = paymentMethod;
+        }
+    }
+
     public boolean isPaid() {
         return paid;
     }
@@ -88,6 +102,7 @@ public class Billing {
                 "Test Cost: " + testCost + "\n" +
                 "Total Amount: " + totalAmount + "\n" +
                 "Total Due: " + totalDue + "\n" +
+                "Payment Method: " + paymentMethod + "\n" +
                 "Paid: " + (paid ? "Yes" : "No");
     }
 

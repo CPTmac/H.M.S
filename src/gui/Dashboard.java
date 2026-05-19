@@ -95,7 +95,7 @@ public class Dashboard extends JPanel {
         );
 
         btnReports.addActionListener(e ->
-                new ReportForm(mainFrame).setVisible(true)
+                new ReportForm(mainFrame, service).setVisible(true)
         );
 
         btnRooms.addActionListener(e ->

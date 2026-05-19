@@ -32,7 +32,7 @@ public class LabTestForm extends JFrame {
 
     private void init() {
 
-        setLayout(new GridLayout(5, 2, 10, 10));
+        setLayout(new GridLayout(0, 2, 10, 10));
 
         // build patient selector from appointment service
         add(new JLabel("Patient:"));
